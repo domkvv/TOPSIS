@@ -1,8 +1,15 @@
 import random
 from load_data import Dataset
 from enum_criteria import Criteria
-from numpy import matmul , argmax
+from numpy import matmul , argmax , array, sqrt
+import numpy
 import pandas as pd
+
+
+
+WEIGHTS_VECTOR = [0.6, 0.1, 0.07, 0.13, 0.05, 0.05]
+TYPE = [True, False, False, False, False, False]
+
 
 def change_importace(arr):
     global arr_importance
@@ -38,7 +45,7 @@ def choose_3_hotels(data, criterion, min_lim, max_lim):
     n = len(ids)
 
     while n < 3:
-        idx = random.randint(1, 120)
+        idx = random.randint(1, len(data))
         if idx not in ids:
             ids.append(idx)
             n += 1
@@ -48,36 +55,56 @@ def choose_3_hotels(data, criterion, min_lim, max_lim):
     for idx in ids:
         hotels.append(data.get_dicts_array()[idx])
     
+
     return hotels
 
 
-def get_best():
-    priority_vextors = []
-    for  i in range(len(Criteria)):
-        priority_vextors.append(calculate_priority_vector(arr_criteria[i]))
-        
-    c12_matrix = calculate_priority_vector(arr_importance)
-    matrix_all_weights = paste_all_weights_matrix(priority_vextors)
-    res = matmul(matrix_all_weights , c12_matrix)
+def create_matrix_criteria_alternatives(hotels):
+    matrix = [[0]*len(Criteria) for i in range(3)]
     
-    return argmax(res)
+    for i in range(len(hotels)):
+        for critery in Criteria:
+            matrix[i][critery.value] = int(hotels[i].get(critery.get_origin_name()))
+    
+    return normalize_matrix(matrix)
     
     
-def paste_all_weights_matrix(matrix_p):
-    matrix_all_weights = []
+def normalize_matrix(matrix):
+    vector =  numpy.sqrt(numpy.sum(array(matrix), axis=0))
+    return [[matrix[i][j]/vector[j]  for j in range(len(matrix[0]))] for i in range(len(matrix))]
     
-    for j in range(3):
-        matrix_all_weights.append([])
-        for i in range(len(Criteria)):
-            matrix_all_weights[j].append(matrix_p[i][j])
+
+def weighted_matrix(matrix):
+    return [[matrix[i][j]*WEIGHTS_VECTOR[j]  for j in range(len(matrix[0]))] for i in range(len(matrix))]
     
-    return matrix_all_weights
-        
-            
-def calculate_priority_vector(matrix):
     
-    sum_matrix = sum(sum(matrix,[]))
-    vector = []
-    for row in matrix:
-        vector.append(sum(row)/ sum_matrix)
-    return vector
+def choose_ideal(matrix):
+    max_vector = numpy.max(array(matrix), axis=0)
+    min_vector = numpy.min(array(matrix), axis=0)
+    ideal_best = [min_vector[j] if TYPE[j] else max_vector[j] for j in range(len(matrix[0]))]
+    ideal_worst = [max_vector[j] if TYPE[j] else min_vector[j] for j in range(len(matrix[0]))]
+    return ideal_best, ideal_worst
+   
+
+def calculate_separation(matrix, ideal_best, ideal_worst):
+    separation_array_positive = [0 for i in range(len(matrix))]
+    separation_array_negative = [0 for i in range(len(matrix))]
+    
+    for i in range(len(matrix)):
+        temp_sum_positive = 0
+        temp_sum_negative = 0
+        for j in range(len(matrix[i])):
+            temp_sum_positive += (matrix[i][j] - ideal_best[j])**2
+            temp_sum_negative += (matrix[i][j] - ideal_worst[j])**2
+        separation_array_positive[i], separation_array_negative[i] = sqrt(temp_sum_positive), sqrt(temp_sum_negative)
+    return [separation_array_negative[i]/(separation_array_negative[i]+separation_array_positive[i]) for i in range(len(matrix))]
+ 
+    
+def get_best(hotels):
+    matrix = create_matrix_criteria_alternatives(hotels)
+    matrix = weighted_matrix(matrix)
+    ideal_best, ideal_worst = choose_ideal(matrix)
+    ci_array = calculate_separation(matrix, ideal_best, ideal_worst)
+    
+    return ci_array.index(min(ci_array))
+   

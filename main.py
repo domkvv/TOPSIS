@@ -8,7 +8,7 @@ from weights_dialog import *
 
 def calculate(window, hotels):
     # we are calculating!
-    result = hotels[get_best()]
+    result = hotels[get_best(hotels)]
 
     # view the result    
     values = window.mydata.get_values(list(result.values())[0])
@@ -32,7 +32,7 @@ def show_alternatives(window, category, search_range):
     
     # view  
     headers = tuple(window.mydata.headers)[1:4] + tuple(window.criteria)
-
+    
     result_view = ttk.Treeview( window, selectmode='none', columns=headers, height=2)    
     result_view.column('#0', anchor="center", stretch=False , width=1)
     for header in headers:
@@ -42,6 +42,7 @@ def show_alternatives(window, category, search_range):
 
     result_view.grid(row=8, column=0, columnspan=3, pady=30)
     for i in range(3): result_view.insert(parent='', index=i, iid=i, values=chosen_3[i])
+    
     
 
 def menu_callback(window):
