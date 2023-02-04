@@ -1,10 +1,10 @@
-# Choosing the best skiing hotel with the AHP/EVM method 🏂🏼
+# Choosing the best skiing hotel with the TOPSIS method 🏂🏼
 
 This is a simple desktop python application for the Decision Algorithms 2022/23 course project. 
 
 ### Short description
 
-The application uses the AHP/EVM method to compare skiing hotels. It allows the user to select their preferences based on few particular features, compares the possible options and finds the most suitable one.
+The application uses the TOPSIS method to compare skiing hotels. It allows the user to select their preferences based on few particular features, compares the possible options and finds the most suitable one.
 
 The user can compare the hotels in terms of:
 - price (£)
@@ -35,15 +35,14 @@ To run the program the user should:
 
 ### Usage
 Firstly, the user chooses the criterion which they consider the most important and its target range. Secondly, the application 
-selects 3 most favorable options. Then, the user clicks "Get the Expert's view" and the expert (potentially the user) compares the 3 above-mentioned options - hotels in terms of every criterion using Saaty's 1-9 scale. After that, the user clicks "Get weights" and similarly the expert compares all the criteria with each other. Finally, we can calculate the result after clicking "Calculate". 
+selects 3 most favorable options. Then, the user clicks "Calculate". 
 
 ####
 Here is a simple video of the app in action:
 <p align="center">
-  <img src="./example.gif" alt="addStat" wifth = "900" height = "500"/>
+  <img src="./example.gif" alt="addStat" width = "900" height = "500"/>
   </br>
 </p>
-
 
 ### Authors
 
