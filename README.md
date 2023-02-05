@@ -40,7 +40,7 @@ selects 3 most favorable options. Then, the user clicks "Calculate".
 ####
 Here is a simple video of the app in action:
 <p align="center">
-  <img src="./example.gif" alt="addStat" width = "900" height = "500"/>
+  <img src="./TOPSIS_gui.gif" alt="addStat" width = "900" height = "500"/>
   </br>
 </p>
 
