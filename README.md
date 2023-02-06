@@ -4,9 +4,9 @@ This is a simple desktop python application for the Decision Algorithms 2022/23 
 
 ### Short description
 
-The application uses the TOPSIS method to compare skiing hotels. It allows the user to select their preferences based on few particular features, compares the possible options and finds the most suitable one.
+The application uses the TOPSIS method to compare skiing hotels. It compares 3 options based on few particular features and finds the most suitable one.
 
-The user can compare the hotels in terms of:
+The hotels are compared in terms of:
 - price (£)
 - distance from lift (m)
 - altitude (m)
@@ -40,7 +40,7 @@ selects 3 most favorable options. Then, the user clicks "Calculate".
 ####
 Here is a simple video of the app in action:
 <p align="center">
-  <img src="./example.gif" alt="addStat" width = "900" height = "500"/>
+  <img src="./TOPSIS_gui.gif" alt="addStat" width = "900" height = "500"/>
   </br>
 </p>
 
